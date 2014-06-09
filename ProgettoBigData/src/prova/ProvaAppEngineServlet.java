@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import resources.Dataset;
 import resources.PuntoDist;
 
@@ -19,8 +21,10 @@ public class ProvaAppEngineServlet extends HttpServlet {
 		int quantita = Integer.parseInt(req.getParameter("quantita"));
 		PrintWriter out = resp.getWriter();
 		CalcolaPercorsoBreve cpb = new CalcolaPercorsoBreve(prodotto, quantita);
-		for(PuntoDist p: cpb.getPercorso()){
-			out.println(p.getDist());
-		}
+//		for(PuntoDist p: cpb.getPercorso()){
+//			out.println(p.getDist());
+//		}
+		Gson gson = new Gson();
+		out.println(gson.toJson(cpb.getPercorso()));
 	}
 }
