@@ -2,8 +2,10 @@ package resources;
 
 public class PuntoDist extends Punto implements Comparable<PuntoDist>{
 	private double dist;
-	public PuntoDist(double latitudine, double longitudine) {
-		super(latitudine, longitudine);
+	private boolean visited;
+	public PuntoDist(double latitudine, double longitudine, long id) {
+		super(latitudine, longitudine, id);
+		this.visited  = false;
 	}
 	public double getDist() {
 		return dist;
@@ -14,6 +16,12 @@ public class PuntoDist extends Punto implements Comparable<PuntoDist>{
 	
 	public int compareTo(PuntoDist p){
 		return (int) (this.dist - p.getDist());
+	}
+	public boolean isVisited() {
+		return visited;
+	}
+	public void setVisited(boolean visited) {
+		this.visited = visited;
 	}
 
 	
