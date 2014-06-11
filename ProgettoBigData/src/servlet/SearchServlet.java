@@ -8,19 +8,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import actions.BestPriceAction;
+import actions.ShortestRouteAction;
 
 import com.google.gson.Gson;
-
-import resources.Dataset;
 
 @SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
+		System.out.println("SEARH");
 		resp.setContentType("application/json");
-		String product = req.getParameter("product");
-		int quantity = Integer.parseInt(req.getParameter("quantity"));
-		String searchMethod = req.getParameter("search_method");
+//		String product = req.getParameter("product");
+//		int quantity = Integer.parseInt(req.getParameter("quantity"));
+//		String searchMethod = req.getParameter("search_method");
+		String product = req.getParameter("prodotto");
+		int quantity = Integer.parseInt(req.getParameter("quantita"));
+		String searchMethod = "shortest route";
 		PrintWriter out = resp.getWriter();
 		Gson gson = new Gson();
 		
@@ -30,9 +33,10 @@ public class SearchServlet extends HttpServlet {
 			out.println(gson.toJson(bpa.getRoute()));
 			break;
 		}
-		case "shortest rute":{
-			CalcolaPercorsoBreve cpb = new CalcolaPercorsoBreve(Dataset.getPuntoUtente(),product, quantity,0,0, Dataset.getPuntiByProdotto(product));
-			out.println(gson.toJson(cpb.getPercorso()));
+		case "shortest route":{
+			System.out.println("SHORTEST ROUTE");
+			ShortestRouteAction sra = new ShortestRouteAction(product, quantity);
+			out.println(gson.toJson(sra.getRoute()));
 			break;
 		}
 		}
