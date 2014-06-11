@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import resources.DistanceMatrix;
 import resources.Punto;
 import resources.PuntoDist;
 
@@ -28,11 +29,12 @@ public class OrdinaPunti {
 		PuntoDist punto;
 		for (Punto p : punti) {
 			if (!from.equals(p)) {
-				APIRequester apir = new APIRequester();
-				String json = apir.request(from, p);
-				if (DistanceParser.getDistance(json) != 0) {
+//				APIRequester apir = new APIRequester();
+//				String json = apir.request(from, p);
+				double dist = DistanceMatrix.getDistance(from.getId(), p.getId());
+				if (dist != 0) {
 					punto = new PuntoDist(p.getLatitudine(), p.getLongitudine(), p.getId());
-					punto.setDist(DistanceParser.getDistance(json));
+					punto.setDist(dist);
 					punto.setProdotti(p.getProdotti());
 					puntiDist.add(punto);
 				}

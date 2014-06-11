@@ -31,7 +31,7 @@ public class Dataset {
 		p = new Punto(40.857448,14.268097,3);
 		p.addProdotto(new Prodotto("gamberi",15,1));
 		p.addProdotto(new Prodotto("soiola",15,2));
-		p.addProdotto(new Prodotto("cozze",180,0.2));
+		p.addProdotto(new Prodotto("cozze",300,0.2));
 		punti.add(p);
 		//orbetello
 		p = new Punto(42.441131,11.21265,4);
