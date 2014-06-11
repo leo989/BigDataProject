@@ -6,50 +6,50 @@ import java.util.List;
 import resources.Dataset;
 import resources.Punto;
 import resources.PuntoDist;
-import servlet.OrdinaPunti;
+import servlets.OrdinaPunti;
 
 public class ShortestRouteAction {
 
-	private String prodotto;
-	private int quantita;
+	private String product;
+	private int quantity;
 
-	public ShortestRouteAction(String prodotto, int quantita) {
-		this.prodotto = prodotto;
-		this.quantita = quantita;
+	public ShortestRouteAction(String product, int quantity) {
+		this.product = product;
+		this.quantity = quantity;
 	}
 
 	public List<Punto> getRoute() {
-		List<Punto> route = new ArrayList<Punto>();
+		List<Punto> points = new ArrayList<Punto>();
 		for (PuntoDist p : this.getPercorso()) {
-			Punto pt = new Punto(p.getLatitudine(), p.getLongitudine(),
-					p.getId());
+			Punto pt = new Punto(p.getLatitudine(), p.getLongitudine(), p.getId());
 			pt.setProdotti(p.getProdotti());
-			route.add(pt);
+			points.add(pt);
 		}
-		return route;
+		return points;
 	}
 
 	public List<PuntoDist> getPercorso() {
 		List<PuntoDist> route = new ArrayList<PuntoDist>();
-		List<Punto> points = Dataset.getPuntiByProdotto(prodotto);
+		List<Punto> points = Dataset.getPuntiByProdotto(product);
 		System.out.println("SIZE1: "+points.size());
-		PuntoDist corrente = this.getPiuVicino(Dataset.getPuntoUtente(),points);
-		int currentQuantity = corrente.searchProdotto(prodotto).getQuantità();
-		if (currentQuantity >= this.quantita) {
-			route.add(corrente);
-		} else {
-			while(currentQuantity < this.quantita){
-				route.add(corrente);
-				points.remove(corrente);
-				System.out.println("SIZE2 "+points.size());
-				corrente = this.getPiuVicino(corrente, points);
-			}
-
+		PuntoDist corrente = this.getPiuVicino(Dataset.getPuntoUtente(), points);
+		int currentQuantity = corrente.searchProdotto(this.product).getQuantità();
+		route.add(corrente);
+		while(currentQuantity < this.quantity){
+			points.remove(corrente);
+			corrente = this.getPiuVicino(corrente, points);
+			if (corrente == null) 
+				return route;
+			currentQuantity += corrente.searchProdotto(this.product).getQuantità();
+			route.add(corrente);			
 		}
 		return route;
 	}
 
 	public PuntoDist getPiuVicino(Punto from, List<Punto> punti) {
-		return OrdinaPunti.ordinaPerDistanza(from, punti).get(0);
+		List<PuntoDist> points = OrdinaPunti.ordinaPerDistanza(from, punti);
+		if (points == null || points.isEmpty())
+			return null;
+		return points.get(0);
 	}
 }

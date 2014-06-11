@@ -5,12 +5,12 @@ xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet>
-		<servlet-name>SearchServlet</servlet-name>
-		<servlet-class>servlet.SearchServlet</servlet-class>
+		<servlet-name>Search</servlet-name>
+		<servlet-class>servlets.SearchServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>ProvaAppEngine</servlet-name>
-		<url-pattern>/provaappengine</url-pattern>
+		<servlet-name>Search</servlet-name>
+		<url-pattern>/search</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

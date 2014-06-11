@@ -5,6 +5,7 @@ import java.util.Comparator;
 public class PriceComparator implements Comparator<Punto> {
 
 	private String product;
+	
 	public PriceComparator(String productName){
 		this.product = productName;
 	}
@@ -14,6 +15,4 @@ public class PriceComparator implements Comparator<Punto> {
 		double price2 = p2.searchProdotto(product).getPrezzo();
 		return Double.compare(price1, price2);
 	}
-
-	
 }

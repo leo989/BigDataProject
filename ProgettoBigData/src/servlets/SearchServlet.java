@@ -1,4 +1,4 @@
-package servlet;
+package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,20 +14,19 @@ import com.google.gson.Gson;
 
 @SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
-		System.out.println("SEARH");
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String product = req.getParameter("product");
+		int quantity = Integer.parseInt(req.getParameter("quantity"));
+		String searchMethod = req.getParameter("search_method");
+//		String product = req.getParameter("prodotto");
+//		int quantity = Integer.parseInt(req.getParameter("quantita"));
+//		String searchMethod = "shortest route";
+		
 		resp.setContentType("application/json");
-//		String product = req.getParameter("product");
-//		int quantity = Integer.parseInt(req.getParameter("quantity"));
-//		String searchMethod = req.getParameter("search_method");
-		String product = req.getParameter("prodotto");
-		int quantity = Integer.parseInt(req.getParameter("quantita"));
-		String searchMethod = "shortest route";
 		PrintWriter out = resp.getWriter();
 		Gson gson = new Gson();
 		
-		switch(searchMethod){
+		switch(searchMethod.toLowerCase()){
 		case "best price":{
 			BestPriceAction bpa = new BestPriceAction(product, quantity);
 			out.println(gson.toJson(bpa.getRoute()));
