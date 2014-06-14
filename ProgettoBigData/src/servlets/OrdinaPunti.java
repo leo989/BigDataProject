@@ -1,8 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import resources.DistanceMatrix;
@@ -22,10 +22,27 @@ public class OrdinaPunti {
 		}
 		return null;
 	}
+	public static List<Punto> ordinaPerDistanzaAndReturnPunto(Punto from, List<Punto> punti) {
+		List<Punto> ris = new ArrayList<Punto>();
+		List<PuntoDist> points;
+		try {
+			points = calcolaDist(from, punti);
+			Collections.sort(points);
+			for(PuntoDist pt: points){
+				Punto p = new Punto(pt.getLatitudine(),pt.getLongitudine(),pt.getId());
+				p.setProdotti(pt.getProdotti());
+				ris.add(p);
+			}
+			return ris;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	private static List<PuntoDist> calcolaDist(Punto from, List<Punto> punti)
 			throws IOException {
-		List<PuntoDist> puntiDist = new LinkedList<PuntoDist>();
+		List<PuntoDist> puntiDist = new ArrayList<PuntoDist>();
 		PuntoDist punto;
 		for (Punto p : punti) {
 			if (!from.equals(p)) {

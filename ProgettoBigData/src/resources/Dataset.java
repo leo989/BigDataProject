@@ -1,6 +1,8 @@
 package resources;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Dataset {
 	private static LinkedList<Punto> punti;
@@ -112,8 +114,8 @@ public class Dataset {
 		return punti;
 	}
 	
-	public static LinkedList<Punto> getPuntiByProdotto(String prodotto){
-		LinkedList<Punto> ris = new LinkedList<Punto>();
+	public static List<Punto> getPuntiByProdotto(String prodotto){
+		List<Punto> ris = new ArrayList<Punto>();
 		for(Punto p: getPunti()){
 			for(Prodotto prod: p.getProdotti()){
 				if(prod.getProdotto().equals(prodotto))
