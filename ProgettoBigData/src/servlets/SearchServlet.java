@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import resources.Dataset;
 import resources.Punto;
 import actions.BestPriceAction;
+import actions.BestTotalCostAction;
 import actions.ShortestRouteAction2;
 
 import com.google.gson.Gson;
@@ -20,6 +21,8 @@ public class SearchServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String product = req.getParameter("product");
 		int quantity = Integer.parseInt(req.getParameter("quantity"));
+		double kmAlLitro = 16;
+		double euroAlLitro = 1.6;
 		String searchMethod = req.getParameter("search_method");
 		resp.setContentType("application/json");
 		PrintWriter out = resp.getWriter();
@@ -32,9 +35,14 @@ public class SearchServlet extends HttpServlet {
 			break;
 		}
 		case "shortest route":{
-			System.out.println("SHORTEST ROUTE");
 			ShortestRouteAction2 sra2 = new ShortestRouteAction2(product, quantity, Dataset.getPuntoUtente());
 			List<Punto> points = sra2.getRoute();
+			out.println(gson.toJson(points));
+			break;
+		}
+		case "best total cost":{
+			BestTotalCostAction btca = new BestTotalCostAction(product, quantity, Dataset.getPuntoUtente(),kmAlLitro,euroAlLitro);
+			List<Punto> points = btca.getRoute();
 			out.println(gson.toJson(points));
 			break;
 		}
