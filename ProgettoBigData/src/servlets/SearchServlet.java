@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import resources.Dataset;
-import resources.Punto;
+import resources.Point;
 import actions.BestPriceAction;
 import actions.BestTotalCostAction;
-import actions.ShortestRouteAction2;
+import actions.ShortestRouteAction;
 
 import com.google.gson.Gson;
 
@@ -35,14 +35,14 @@ public class SearchServlet extends HttpServlet {
 			break;
 		}
 		case "shortest route":{
-			ShortestRouteAction2 sra2 = new ShortestRouteAction2(product, quantity, Dataset.getPuntoUtente());
-			List<Punto> points = sra2.getRoute();
+			ShortestRouteAction sra2 = new ShortestRouteAction(product, quantity, Dataset.getUserPoint());
+			List<Point> points = sra2.getRoute();
 			out.println(gson.toJson(points));
 			break;
 		}
 		case "best total cost":{
-			BestTotalCostAction btca = new BestTotalCostAction(product, quantity, Dataset.getPuntoUtente(),kmAlLitro,euroAlLitro);
-			List<Punto> points = btca.getRoute();
+			BestTotalCostAction btca = new BestTotalCostAction(product, quantity, Dataset.getUserPoint(),kmAlLitro,euroAlLitro);
+			List<Point> points = btca.getRoute();
 			out.println(gson.toJson(points));
 			break;
 		}

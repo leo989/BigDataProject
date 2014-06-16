@@ -2,11 +2,11 @@ package resources;
 
 import java.util.Comparator;
 
-public class RouteComparator implements Comparator<Percorso> {
+public class RouteComparator implements Comparator<Route> {
 
 	@Override
-	public int compare(Percorso p1, Percorso p2) {
-		return Double.compare(p1.getLunghezza(), p2.getLunghezza());
+	public int compare(Route p1, Route p2) {
+		return Double.compare(p1.getLength(), p2.getLength());
 	}
 
 }

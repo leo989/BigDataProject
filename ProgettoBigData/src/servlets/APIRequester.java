@@ -8,7 +8,7 @@ import java.net.URL;
 
 import com.google.gson.Gson;
 
-import resources.Punto;
+import resources.Point;
 
 public class APIRequester {
 	private String APIUrl = "http://maps.googleapis.com/maps/api/directions/json?";
@@ -17,9 +17,9 @@ public class APIRequester {
 	public APIRequester(){
 		gson = new Gson();
 	}
-	public String request(Punto origine, Punto destinazione) throws IOException{
-		String origin = "origin="+origine.getLatitudine()+","+origine.getLongitudine();
-		String destination = "destination="+destinazione.getLatitudine()+","+destinazione.getLongitudine();
+	public String request(Point from, Point to) throws IOException{
+		String origin = "origin="+from.getLatitude()+","+from.getLongitude();
+		String destination = "destination="+to.getLatitude()+","+to.getLongitude();
 		URL url = new URL(APIUrl+origin+"&"+destination);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		BufferedReader read = new BufferedReader(new InputStreamReader(connection.getInputStream()));

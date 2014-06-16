@@ -4,40 +4,33 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import resources.CostRouteComparator;
 import resources.Dataset;
-import resources.DistanceMatrix;
 import resources.Route;
 import resources.Point;
 import resources.PointWithDistance;
+import resources.RouteComparator;
 import servlets.SortPoints;
 
-public class BestTotalCostAction {
+public class ShortestRouteAction {
+
 	private String product;
 	private double quantity;
 	private Point user;
-	private double kmWeight;
 
-	public BestTotalCostAction(String product, int quantity, Point userPoint, double kmPerLiter, double euroPerLiter) {
-		this.product = product;
+	public ShortestRouteAction(String product, double quantity, Point user) {
 		this.quantity = quantity;
-		this.user = userPoint;
-		this.kmWeight = euroPerLiter/kmPerLiter;
+		this.product = product;
+		this.user = user;
 	}
 
 	public List<Point> getRoute() {
 		List<Point> totalPoints = SortPoints.sortByDistanceAndReturnPoint(user, Dataset.getPointByProduct(product));
 		List<Route> totalRoute = new ArrayList<Route>();
 		while(totalPoints.size()>0){
-			Route route = this.getValidRoute(user, totalPoints);
-			PointWithDistance userPoint = new PointWithDistance(user.getLatitude(),user.getLongitude(),user.getId());
-			userPoint.setDist(DistanceMatrix.getDistance(route.getPoints().get(route.getPoints().size()-1).getId(), user.getId()));
-			route.add(userPoint);
-			route.aggTotalCost(product, quantity, kmWeight);
-			totalRoute.add(route);
+			totalRoute.add(this.getValidRoute(user, totalPoints));
 			totalPoints.remove(0);
 		}
-		Collections.sort(totalRoute, new CostRouteComparator());
+		Collections.sort(totalRoute, new RouteComparator());
 		return this.route2points(totalRoute.get(0));
 	}
 

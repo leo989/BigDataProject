@@ -38,7 +38,7 @@ var displayRoute = function(points) {
 	console.log(typeof points);
 	var start = 'orte, VT';
 	var endPoint = points.pop();
-	var end = new google.maps.LatLng(endPoint.latitudine, endPoint.longitudine);
+	var end = new google.maps.LatLng(endPoint.latitude, endPoint.longitude);
 	var request = {
 		origin: start,
 		destination: end,
@@ -55,8 +55,8 @@ var displayRoute = function(points) {
 var calculateWaypoints = function(points) {
 	var waypoints = new Array();
 	points.forEach(function(entry) {
-		var lat = entry.latitudine;
-		var lng = entry.longitudine;
+		var lat = entry.latitude;
+		var lng = entry.longitude;
 		waypoints.push(new Waypoint(new google.maps.LatLng(lat, lng), true))
 	});
 	return waypoints;

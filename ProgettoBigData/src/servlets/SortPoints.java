@@ -1,0 +1,63 @@
+package servlets;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import resources.DistanceMatrix;
+import resources.Point;
+import resources.PointWithDistance;
+
+public class SortPoints {
+
+	public static List<PointWithDistance> sortByDistance(Point from, List<Point> points) {
+		List<PointWithDistance> ris;
+		try {
+			ris = calculateDistance(from, points);
+			Collections.sort(ris);
+			return ris;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public static List<Point> sortByDistanceAndReturnPoint(Point from, List<Point> points) {
+		List<Point> ris = new ArrayList<Point>();
+		List<PointWithDistance> pointsWithDistance;
+		try {
+			pointsWithDistance = calculateDistance(from, points);
+			Collections.sort(pointsWithDistance);
+			for(PointWithDistance pt: pointsWithDistance){
+				Point p = new Point(pt.getLatitude(),pt.getLongitude(),pt.getId());
+				p.setProducts(pt.getProducts());
+				ris.add(p);
+			}
+			return ris;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static List<PointWithDistance> calculateDistance(Point from, List<Point> points)
+			throws IOException {
+		List<PointWithDistance> pointsWithDistance = new ArrayList<PointWithDistance>();
+		PointWithDistance point;
+		for (Point p : points) {
+			if (!from.equals(p)) {
+//				APIRequester apir = new APIRequester();
+//				String json = apir.request(from, p);
+//				double dist = DistanceParser.getDistance(json);
+				double dist = DistanceMatrix.getDistance(from.getId(), p.getId());
+				if (dist != 0) {
+					point = new PointWithDistance(p.getLatitude(), p.getLongitude(), p.getId());
+					point.setDist(dist);
+					point.setProducts(p.getProducts());
+					pointsWithDistance.add(point);
+				}
+			}
+		}
+		return pointsWithDistance;
+	}
+}

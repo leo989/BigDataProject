@@ -6,7 +6,7 @@ import java.util.List;
 
 import resources.Dataset;
 import resources.PriceComparator;
-import resources.Punto;
+import resources.Point;
 
 public class BestPriceAction {
 	
@@ -18,13 +18,13 @@ public class BestPriceAction {
 		this.quantity = quantity;
 	}
 	
-	public List<Punto> getRoute() {
-		List<Punto> points = Dataset.getPuntiByProdotto(this.product);
+	public List<Point> getRoute() {
+		List<Point> points = Dataset.getPointByProduct(this.product);
 		Collections.sort(points, new PriceComparator(this.product));
 		int c = 0;
-		List<Punto> pointsToReturn = new ArrayList<Punto>();
-		for (Punto point : points) {
-			c += point.searchProdotto(product).getQuantità();
+		List<Point> pointsToReturn = new ArrayList<Point>();
+		for (Point point : points) {
+			c += point.searchProduct(product).getQuantity();
 			pointsToReturn.add(point);
 			if (c >= quantity)
 				return pointsToReturn;

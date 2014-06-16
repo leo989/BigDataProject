@@ -2,7 +2,7 @@ package resources;
 
 import java.util.Comparator;
 
-public class PriceComparator implements Comparator<Punto> {
+public class PriceComparator implements Comparator<Point> {
 
 	private String product;
 	
@@ -10,9 +10,9 @@ public class PriceComparator implements Comparator<Punto> {
 		this.product = productName;
 	}
 	@Override
-	public int compare(Punto p1, Punto p2) {
-		double price1 = p1.searchProdotto(product).getPrezzo();
-		double price2 = p2.searchProdotto(product).getPrezzo();
+	public int compare(Point p1, Point p2) {
+		double price1 = p1.searchProduct(product).getPrice();
+		double price2 = p2.searchProduct(product).getPrice();
 		return Double.compare(price1, price2);
 	}
 }

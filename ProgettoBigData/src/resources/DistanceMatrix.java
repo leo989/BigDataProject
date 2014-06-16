@@ -3,10 +3,10 @@ package resources;
 public class DistanceMatrix {
 
 	public static double getDistance(long idFrom, long idTo) {
-		return punto2punto[(int) idFrom][(int) idTo];
+		return point2point[(int) idFrom][(int) idTo];
 	}
 
-	private static final double[][] punto2punto = {
+	private static final double[][] point2point = {
 			// 0
 			{ 0, 88.3, 87.4, 276, 117, 80.5, 75.4, 62.2, 122, 148, 185, 46.4,
 					33, 59.9, 45.5, 17.7, 48.9, 65.3 },
