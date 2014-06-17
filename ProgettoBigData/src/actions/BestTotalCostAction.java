@@ -46,6 +46,8 @@ public class BestTotalCostAction {
 			}
 		}
 		Collections.sort(totalRoute, new CostRouteComparator());
+		if(totalRoute.isEmpty())
+			return null;
 		return this.route2points(totalRoute.get(0));
 	}
 

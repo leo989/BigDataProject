@@ -20,7 +20,13 @@ var search = function() {
 		dataType: 'json',
 		data: $('#input-form').serializeArray(),
 		success: function(data) {
-			displayRoute(data);
+			if(data === null){
+				console.log('[NIENTE]');
+				$('#error').fadeIn();
+			}else{
+				$('#error').fadeOut();
+				displayRoute(data);
+			}
 		},
 		error: function() {
 			console.log('[ERRORE]');
