@@ -30,14 +30,20 @@ public class BestTotalCostAction {
 	public List<Point> getRoute() {
 		List<Point> totalPoints = SortPoints.sortByDistanceAndReturnPoint(user, Dataset.getPointByProduct(product),enableAPIs);
 		List<Route> totalRoute = new ArrayList<Route>();
+		System.out.println("------");
 		while(totalPoints.size()>0){
 			Route route = this.getValidRoute(user, totalPoints,enableAPIs);
-			PointWithDistance userPoint = new PointWithDistance(user.getLatitude(),user.getLongitude(),user.getId());
-			userPoint.setDist(DistanceMatrix.getDistance(route.getPoints().get(route.getPoints().size()-1).getId(), user.getId()));
-			route.add(userPoint);
-			route.aggTotalCost(product, quantity, kmWeight);
-			totalRoute.add(route);
-			totalPoints.remove(0);
+			if(route != null){
+				PointWithDistance userPoint = new PointWithDistance(user.getLatitude(),user.getLongitude(),user.getId());
+				userPoint.setDist(DistanceMatrix.getDistance(route.getPoints().get(route.getPoints().size()-1).getId(), user.getId()));
+				route.add(userPoint);
+				route.aggTotalCost(product, quantity, kmWeight);
+				System.out.println(route);
+				totalRoute.add(route);
+				totalPoints.remove(0);
+			}else{
+				break;		
+			}
 		}
 		Collections.sort(totalRoute, new CostRouteComparator());
 		return this.route2points(totalRoute.get(0));
@@ -67,12 +73,12 @@ public class BestTotalCostAction {
 					route.aggQuantity(point.searchProduct(product).getQuantity());
 					toVisit = toVisitBis;
 				}else{
-					return route;
+					return null;
 				}
 			}
 		return route;
 		}else{
-			return route;
+			return null;
 		}
 	}
 

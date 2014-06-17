@@ -37,8 +37,12 @@ public class Route {
 	public String toString() {
 		String toString = "";
 		for(PointWithDistance p: this.points)
-			toString += ("-> "+p.getId());
-		return toString+" Lunghezza totale "+this.length;
+			toString += (p.getId()+"->");
+		toString = toString.substring(0, toString.length()-2);
+		toString += " Lunghezza totale "+this.length;
+		toString += " Quantita totale "+this.quantity;
+		toString += " TotalCost "+this.totalCost;
+		return toString;
 	}
 
 	public int getQuantity() {
