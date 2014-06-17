@@ -17,19 +17,21 @@ public class BestTotalCostAction {
 	private double quantity;
 	private Point user;
 	private double kmWeight;
+	private boolean enableAPIs;
 
-	public BestTotalCostAction(String product, int quantity, Point userPoint, double kmPerLiter, double euroPerLiter) {
+	public BestTotalCostAction(String product, int quantity, Point userPoint, double kmPerLiter, double euroPerLiter, boolean enableAPIs) {
 		this.product = product;
 		this.quantity = quantity;
 		this.user = userPoint;
 		this.kmWeight = euroPerLiter/kmPerLiter;
+		this.enableAPIs = enableAPIs;
 	}
 
 	public List<Point> getRoute() {
-		List<Point> totalPoints = SortPoints.sortByDistanceAndReturnPoint(user, Dataset.getPointByProduct(product));
+		List<Point> totalPoints = SortPoints.sortByDistanceAndReturnPoint(user, Dataset.getPointByProduct(product),enableAPIs);
 		List<Route> totalRoute = new ArrayList<Route>();
 		while(totalPoints.size()>0){
-			Route route = this.getValidRoute(user, totalPoints);
+			Route route = this.getValidRoute(user, totalPoints,enableAPIs);
 			PointWithDistance userPoint = new PointWithDistance(user.getLatitude(),user.getLongitude(),user.getId());
 			userPoint.setDist(DistanceMatrix.getDistance(route.getPoints().get(route.getPoints().size()-1).getId(), user.getId()));
 			route.add(userPoint);
@@ -51,15 +53,15 @@ public class BestTotalCostAction {
 		return points;
 	}
 
-	private Route getValidRoute(Point from, List<Point> toVisit) {
+	private Route getValidRoute(Point from, List<Point> toVisit, boolean enableAPIs2) {
 		Route route = new Route();
-		PointWithDistance point = this.getNearest(from, toVisit);
+		PointWithDistance point = this.getNearest(from, toVisit,enableAPIs);
 		if(point != null){
 			route.add(point);
 			route.aggQuantity(point.searchProduct(product).getQuantity());
 			while (route.getQuantity() < this.quantity) {
 				List<Point> toVisitBis = this.removePointById(point.getId(),toVisit);
-				point = this.getNearest(point, toVisitBis);
+				point = this.getNearest(point, toVisitBis,enableAPIs);
 				if(point!=null){
 					route.add(point);
 					route.aggQuantity(point.searchProduct(product).getQuantity());
@@ -83,8 +85,8 @@ public class BestTotalCostAction {
 		return points;
 	}
 
-	private PointWithDistance getNearest(Point from, List<Point> points) {
-		List<PointWithDistance> points2 = SortPoints.sortByDistance(from, points);
+	private PointWithDistance getNearest(Point from, List<Point> points, boolean enableAPIs2) {
+		List<PointWithDistance> points2 = SortPoints.sortByDistance(from, points,enableAPIs);
 		if (points.isEmpty())
 			return null;
 		return points2.get(0);
