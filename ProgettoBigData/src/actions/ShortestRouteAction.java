@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import resources.Dataset;
+import resources.FilterPoint;
 import resources.Route;
 import resources.Point;
 import resources.PointWithDistance;
@@ -25,14 +25,21 @@ public class ShortestRouteAction {
 		this.enableAPIs = enableAPIs;
 	}
 
-	public List<Point> getRoute() {
-		List<Point> totalPoints = SortPoints.sortByDistanceAndReturnPoint(user, Dataset.getPointByProduct(product), this.enableAPIs);
+	public List<Point> getRoute(List<Point> pointsToVisit) {
+		List<Point> toVisit = FilterPoint.filter(pointsToVisit,this.product,this.quantity);
+		List<Point> totalPoints = SortPoints.sortByDistanceAndReturnPoint(user, toVisit, this.enableAPIs);
 		List<Route> totalRoute = new ArrayList<Route>();
 		while(totalPoints.size()>0){
-			totalRoute.add(this.getValidRoute(user, totalPoints,this.enableAPIs));
+			Route route = this.getValidRoute(user, totalPoints,this.enableAPIs);
+			if(route != null){
+				System.out.println(route);
+				totalRoute.add(route);
+			}
 			totalPoints.remove(0);
 		}
 		Collections.sort(totalRoute, new RouteComparator());
+		if(totalRoute.isEmpty())
+			return null;
 		return this.route2points(totalRoute.get(0));
 	}
 
@@ -52,7 +59,7 @@ public class ShortestRouteAction {
 		if(point != null){
 			route.add(point);
 			route.aggQuantity(point.searchProduct(product).getQuantity());
-			while (route.getQuantity() < this.quantity) {
+			while (route.getQuantity() < this.quantity && route.getPoints().size()< 4) {
 				List<Point> toVisitBis = this.removePointById(point.getId(),toVisit);
 				point = this.getNearest(point, toVisitBis,enableAPIs);
 				if(point!=null){
@@ -60,12 +67,15 @@ public class ShortestRouteAction {
 					route.aggQuantity(point.searchProduct(product).getQuantity());
 					toVisit = toVisitBis;
 				}else{
-					return route;
+					return null;
 				}
 			}
-		return route;
+			if(route.getQuantity() >= this.quantity)
+				return route;
+			else
+				return null;
 		}else{
-			return route;
+			return null;
 		}
 	}
 

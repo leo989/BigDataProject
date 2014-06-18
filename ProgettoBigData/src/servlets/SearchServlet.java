@@ -48,7 +48,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		case "2":{
 			ShortestRouteAction sra2 = new ShortestRouteAction(product, quantity, Dataset.getUserPoint(), enableAPIs);
-			List<Point> points = sra2.getRoute();
+			List<Point> points = sra2.getRoute(Dataset.getPointByProduct(product));
 			out.println(gson.toJson(points));
 			break;
 		}
