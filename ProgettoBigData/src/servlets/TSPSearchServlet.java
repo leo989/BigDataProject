@@ -34,7 +34,7 @@ public class TSPSearchServlet extends HttpServlet {
 				.getPointByProduct(product));
 	
 		ShortestRouteAction sra = new ShortestRouteAction(product, quantity, Dataset.getUserPoint(), enableAPIs);
-		out.println(gson.toJson(sra.getRoute(pointsToVisit)));
+		out.println(gson.toJson(sra.getRoute()));
 	}
 
 	private List<Point> searchValidPoints(List<Point> pointByProduct) {
@@ -73,7 +73,7 @@ public class TSPSearchServlet extends HttpServlet {
 
 	private Point theFirstBest(List<Point> pointByProduct) {
 		for (Point p : pointByProduct) {
-			if (p.searchProduct(this.product).getQuantity() >= this.quantity)
+			if (p.getProduct(this.product).getQuantity() >= this.quantity)
 				return p;
 		}
 		return null;

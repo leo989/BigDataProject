@@ -45,7 +45,7 @@ public class FilterPoint {
 
 	private static Point theFirstBest(List<Point> pointByProduct, String product, double quantity) {
 		for (Point p : pointByProduct) {
-			if (p.searchProduct(product).getQuantity() >= quantity){
+			if (p.getProduct(product).getQuantity() >= quantity){
 				return p;
 			}
 		}

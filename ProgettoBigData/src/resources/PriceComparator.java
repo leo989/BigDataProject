@@ -11,8 +11,8 @@ public class PriceComparator implements Comparator<Point> {
 	}
 	@Override
 	public int compare(Point p1, Point p2) {
-		double price1 = p1.searchProduct(product).getPrice();
-		double price2 = p2.searchProduct(product).getPrice();
+		double price1 = p1.getProduct(product).getPrice();
+		double price2 = p2.getProduct(product).getPrice();
 		return Double.compare(price1, price2);
 	}
 }

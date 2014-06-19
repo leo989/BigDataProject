@@ -25,6 +25,10 @@ var search = function() {
 			if(data != null){
 				displayRoute(data);
 				$('#result-details').fadeIn();
+				$('#errore').fadeOut();
+			}else{
+				$('#result-details').fadeOut();
+				$('#error').fadeIn();
 			}
 		},
 		error: function() {
