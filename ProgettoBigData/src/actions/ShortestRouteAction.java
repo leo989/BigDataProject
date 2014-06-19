@@ -2,7 +2,13 @@ package actions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import comparators.AerialDistanceComparator;
 import comparators.RouteComparator;
@@ -20,13 +26,15 @@ import servlets.SortPoints;
 public class ShortestRouteAction {
 
 	private static final double MAX_DISTANCE = 200;
+	  private final static int NCPU = Runtime.getRuntime().availableProcessors();
+
+	
 	private String productName;
 	private Integer quantity;
 	private Point startingPoint;
 	private boolean enableAPIs;
 
-	public ShortestRouteAction(String product, Integer quantity,
-			Point startingPoint, boolean enableAPIs) {
+	public ShortestRouteAction(String product, Integer quantity, Point startingPoint, boolean enableAPIs) {
 		this.quantity = quantity;
 		this.productName = product;
 		this.startingPoint = startingPoint;
@@ -36,18 +44,57 @@ public class ShortestRouteAction {
 	public List<Point> getRoute() {
 		List<Route> totalRoute = new ArrayList<Route>();
 		List<ArrayList<Point>> partsOfPoints =  this.getPotentialRoutes();
-		if(partsOfPoints != null){
+		if(partsOfPoints != null) {
 			for(List<Point> list: partsOfPoints){
 				Route route = this.getValidRoute(startingPoint, list, enableAPIs);
 				if(route != null)
 					totalRoute.add(route);
 			}
 			if(!totalRoute.isEmpty()){
-				Collections.sort(totalRoute, new RouteComparator());
-				return this.route2points(totalRoute.get(0));
+				Route r = Collections.min(totalRoute, new RouteComparator());
+				return this.route2points(r);
 			}
 		}
 		return null;
+	}
+	
+	public List<Point> getRouteConcurrence() {
+		List<ArrayList<Point>> partsOfPoints =  this.getPotentialRoutes();
+		if(partsOfPoints != null) {
+			ExecutorService pool = Executors.newFixedThreadPool(NCPU);
+			List<Future<Route>> pending = new LinkedList<Future<Route>>();
+			for (List<Point> points: partsOfPoints) {
+				pending.add(pool.submit(new Worker(points)));
+			}
+			RouteComparator rc = new RouteComparator();
+			Route shortest = null;
+			try {
+				shortest = pending.get(0).get();
+				for (int i = 1; i < pending.size(); i++) {
+					Route r = pending.get(i).get();
+					if (rc.compare(shortest, r) > 0)
+						shortest = r;
+				}
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+			return this.route2points(shortest);
+		}
+		return null;
+	}
+	
+	private class Worker implements Callable<Route> {
+		
+		private List<Point> points;
+
+		public Worker(List<Point> points) {
+			this.points = points;
+		}
+
+		@Override
+		public Route call() throws Exception {
+			return getValidRoute(startingPoint, points, enableAPIs);
+		}		
 	}
 
 	public ArrayList<ArrayList<Point>> getPotentialRoutes() {
