@@ -12,30 +12,10 @@ function initialize() {
 	directionsDisplay = new google.maps.DirectionsRenderer();
 	map = new google.maps.Map(mapCanvas, mapOptions);
 	directionsDisplay.setMap(map);
+	directionsDisplay.setPanel(document.getElementById("result-details"));
 }
 
-var calcRoute = function() {
-	var start = 'bassano in teverina, VT';
- 	var end = 'vasanello, VT';
-	var request = {
-    	origin: start,
-    	destination: end,
-    	travelMode: google.maps.TravelMode.DRIVING,
-    	waypoints: [{
-    		location: 'orte, VT',
-    		stopover: true,
-    	}],
-	};
-  	directionsService.route(request, function(result, status) {
-    	if (status === google.maps.DirectionsStatus.OK) {
-    		directionsDisplay.setDirections(result);
-    	}
-	});
-};
-
 var displayRoute = function(points) {
-	console.log(points);
-	console.log(typeof points);
 	var start = 'orte, VT';
 	var endPoint = points.pop();
 	var end = new google.maps.LatLng(endPoint.latitude, endPoint.longitude);

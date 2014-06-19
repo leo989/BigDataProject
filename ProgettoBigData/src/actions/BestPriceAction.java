@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import comparators.PriceComparator;
+
 import resources.Dataset;
-import resources.PriceComparator;
 import resources.Point;
 
 public class BestPriceAction {
@@ -24,7 +25,7 @@ public class BestPriceAction {
 		int c = 0;
 		List<Point> pointsToReturn = new ArrayList<Point>();
 		for (Point point : points) {
-			c += point.searchProduct(product).getQuantity();
+			c += point.getProduct(product).getQuantity();
 			pointsToReturn.add(point);
 			if (c >= quantity)
 				return pointsToReturn;

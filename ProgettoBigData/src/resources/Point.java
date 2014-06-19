@@ -1,12 +1,14 @@
 package resources;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Point {
 	double latitude;
 	private double longitude;
-	private List<Product> products;
+	private Map<String, Product> products;
 	private long id;
 	
 	
@@ -14,7 +16,7 @@ public class Point {
 		this.setId(id);
 		this.latitude = latitude;
 		this.longitude = longitude;
-		this.products = new LinkedList<Product>();
+		this.products = new HashMap<String, Product>();
 	}
 
 	public double getLatitude() {
@@ -33,23 +35,19 @@ public class Point {
 		this.longitude = longitude;
 	}
 
-	public List<Product> getProducts() {
+	public Map<String, Product> getProducts() {
 		return products;
 	}
 
-	public void setProducts(List<Product> products) {
+	public void setProducts(Map<String, Product> products) {
 		this.products = products;
 	}
 	public void addProduct(Product product){
-		this.products.add(product);
+		this.products.put(product.getName(), product);
 	}
 	
-	public Product searchProduct(String productName){
-		for(Product p: this.products){
-			if(p.getProductName().equals(productName))
-				return p;
-		}
-		return null;
+	public Product getProduct(String productName){
+		return products.get(productName);
 	}
 
 	@Override

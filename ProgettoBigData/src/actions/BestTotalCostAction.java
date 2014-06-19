@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import resources.CostRouteComparator;
+import comparators.CostRouteComparator;
+
 import resources.Dataset;
 import resources.DistanceMatrix;
 import resources.Route;
@@ -66,13 +67,13 @@ public class BestTotalCostAction {
 		PointWithDistance point = this.getNearest(from, toVisit,enableAPIs);
 		if(point != null){
 			route.add(point);
-			route.aggQuantity(point.searchProduct(product).getQuantity());
+			route.aggQuantity(point.getProduct(product).getQuantity());
 			while (route.getQuantity() < this.quantity) {
 				List<Point> toVisitBis = this.removePointById(point.getId(),toVisit);
 				point = this.getNearest(point, toVisitBis,enableAPIs);
 				if(point!=null){
 					route.add(point);
-					route.aggQuantity(point.searchProduct(product).getQuantity());
+					route.aggQuantity(point.getProduct(product).getQuantity());
 					toVisit = toVisitBis;
 				}else{
 					return null;

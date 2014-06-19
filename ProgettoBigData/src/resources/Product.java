@@ -1,22 +1,22 @@
 package resources;
 
 public class Product {
-	private String productName;
+	private String name;
 	private int quantity;
 	private double price;
 	
-	public Product(String productName, int quantity, double price){
+	public Product(String name, int quantity, double price){
 		this.quantity = quantity;
 		this.price = price;
-		this.productName = productName;
+		this.name = name;
 	}
 
-	public String getProductName() {
-		return productName;
+	public String getName() {
+		return name;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setName(String productName) {
+		this.name = productName;
 	}
 
 	public int getQuantity() {

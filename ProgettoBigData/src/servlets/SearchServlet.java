@@ -22,20 +22,21 @@ public class SearchServlet extends HttpServlet {
 		String product = req.getParameter("product");
 		int quantity = Integer.parseInt(req.getParameter("quantity"));
 		double kmAlLitro;
-		try{
+		try {
 			kmAlLitro = Double.parseDouble(req.getParameter("kilometers-per-liter"));
-		}catch(Exception e){
-			kmAlLitro =16;
+		} catch (Exception e) {
+			kmAlLitro = 16;
 		}
 		double euroAlLitro;
-		try{
+		try {
 			euroAlLitro = Double.parseDouble(req.getParameter("euros-per-liter"));
-		}catch(Exception e){
+		} catch(Exception e) {
 			euroAlLitro = 1.6;
 		}
 		String check = req.getParameter("APIs");
 		boolean enableAPIs = (check != null);
 		String searchMethod = req.getParameter("search_method");
+		
 		resp.setContentType("application/json");
 		PrintWriter out = resp.getWriter();
 		Gson gson = new Gson();
@@ -48,7 +49,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		case "2":{
 			ShortestRouteAction sra2 = new ShortestRouteAction(product, quantity, Dataset.getUserPoint(), enableAPIs);
-			List<Point> points = sra2.getRoute(Dataset.getPointByProduct(product));
+			List<Point> points = sra2.getRoute();
 			out.println(gson.toJson(points));
 			break;
 		}

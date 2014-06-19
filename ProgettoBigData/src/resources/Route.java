@@ -70,7 +70,7 @@ public class Route {
 		if(this.quantity>quantity2){
 			double q = quantity2;
 			for(PointWithDistance p: this.points){
-				Product prod = p.searchProduct(product);
+				Product prod = p.getProduct(product);
 				if(prod!=null){
 					if(q>prod.getQuantity()){
 						this.totalCost += prod.getPrice()*prod.getQuantity();
@@ -82,7 +82,7 @@ public class Route {
 			}
 		}else{
 			for(PointWithDistance p: this.points){
-				Product prod = p.searchProduct(product);
+				Product prod = p.getProduct(product);
 				if(prod != null)
 					this.totalCost += prod.getPrice()*prod.getQuantity();
 			}

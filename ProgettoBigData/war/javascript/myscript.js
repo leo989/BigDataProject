@@ -1,5 +1,7 @@
 $(document).ready(function() {
+	
 	$('#search-btn').click(search);
+
 	$('#type-of-search').change(function(){
 		if(this.value === '2'){
 			$('#enableAPIs').fadeIn();
@@ -12,7 +14,7 @@ $(document).ready(function() {
 				$('#enableAPIs').hide();
 			}
 		}
-	})
+	});
 })
 
 var search = function() {
@@ -20,12 +22,9 @@ var search = function() {
 		dataType: 'json',
 		data: $('#input-form').serializeArray(),
 		success: function(data) {
-			if(data === null){
-				console.log('[NIENTE]');
-				$('#error').fadeIn();
-			}else{
-				$('#error').fadeOut();
+			if(data != null){
 				displayRoute(data);
+				$('#result-details').fadeIn();
 			}
 		},
 		error: function() {
@@ -33,3 +32,4 @@ var search = function() {
 		},
 	});
 };
+

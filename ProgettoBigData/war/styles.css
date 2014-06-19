@@ -32,3 +32,10 @@
 .center-items {
 	text-align: center;
 }
+
+#result-details {
+	background-color: #E0E0E0;
+	border-radius: 15px;
+	padding-top: 11px;
+	display: none;
+}

@@ -116,11 +116,9 @@ public class Dataset {
 	
 	public static List<Point> getPointByProduct(String productName){
 		List<Point> ris = new ArrayList<Point>();
-		for(Point p: getAllPoints()){
-			for(Product prod: p.getProducts()){
-				if(prod.getProductName().equals(productName))
-					ris.add(p);
-			}
+		for (Point p: getAllPoints()) {
+			if (p.getProduct(productName) != null)
+				ris.add(p);
 		}
 		return ris;
 	}
