@@ -4,10 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import matchers.DistanceMatcher;
+import matchers.QuantityMatcher;
+import ch.lambdaj.Lambda;
+import comparators.AerialDistanceComparator;
 import comparators.CostRouteComparator;
-
+import comparators.RouteComparator;
 import resources.Dataset;
+import resources.DistanceCalculator;
 import resources.DistanceMatrix;
+import resources.EligibleRoutesCombinator;
 import resources.Route;
 import resources.Point;
 import resources.PointWithDistance;
@@ -19,6 +25,8 @@ public class BestTotalCostAction {
 	private Point user;
 	private double kmWeight;
 	private boolean enableAPIs;
+	private final double maxDistance = 200;
+	private final int maxNumberOfPoint = 6;
 
 	public BestTotalCostAction(String product, int quantity, Point userPoint, double kmPerLiter, double euroPerLiter, boolean enableAPIs) {
 		this.product = product;
@@ -28,29 +36,55 @@ public class BestTotalCostAction {
 		this.enableAPIs = enableAPIs;
 	}
 
+//	public List<Point> getRoute() {
+//		List<Point> filteredPoint = Lambda.filter(new DistanceMatcher(user, maxDistance), Dataset.getPointByProduct(product));
+//		List<Point> totalPoints = SortPoints.sortByDistanceAndReturnPoint(user, filteredPoint,enableAPIs);
+//		List<Route> totalRoute = new ArrayList<Route>();
+//		while(totalPoints.size()>0){
+//			Route route = this.getValidRoute(user, totalPoints,enableAPIs);
+//			if(route != null && route.getPoints().size() < maxNumberOfPoint){
+//				PointWithDistance userPoint = new PointWithDistance(user.getLatitude(),user.getLongitude(),user.getId());
+//				userPoint.setDist(DistanceMatrix.getDistance(route.getPoints().get(route.getPoints().size()-1).getId(), user.getId()));
+//				route.add(userPoint);
+//				route.aggTotalCost(product, quantity, kmWeight);
+//				totalRoute.add(route);
+//				totalPoints.remove(0);
+//			}else{
+//				break;		
+//			}
+//		}
+//		Collections.sort(totalRoute, new CostRouteComparator());
+//		if(totalRoute.isEmpty())
+//			return null;
+//		return this.route2points(totalRoute.get(0));
+//	}
+	
 	public List<Point> getRoute() {
-		List<Point> totalPoints = SortPoints.sortByDistanceAndReturnPoint(user, Dataset.getPointByProduct(product),enableAPIs);
 		List<Route> totalRoute = new ArrayList<Route>();
-		System.out.println("------");
-		while(totalPoints.size()>0){
-			Route route = this.getValidRoute(user, totalPoints,enableAPIs);
-			if(route != null){
-				PointWithDistance userPoint = new PointWithDistance(user.getLatitude(),user.getLongitude(),user.getId());
-				userPoint.setDist(DistanceMatrix.getDistance(route.getPoints().get(route.getPoints().size()-1).getId(), user.getId()));
-				route.add(userPoint);
-				route.aggTotalCost(product, quantity, kmWeight);
-				System.out.println(route);
-				totalRoute.add(route);
-				totalPoints.remove(0);
-			}else{
-				break;		
+		List<ArrayList<Point>> partsOfPoints =  this.getPotentialRoutes();
+		if(partsOfPoints != null) {
+			for(List<Point> list: partsOfPoints){
+				Route route = this.getValidRoute(user, list, enableAPIs);
+				if(route != null){
+					route.aggTotalCost(product, quantity, kmWeight);
+					totalRoute.add(route);
+				}
+			}
+			if(!totalRoute.isEmpty()){
+				Route r = Collections.min(totalRoute, new RouteComparator());
+				return this.route2points(r);
 			}
 		}
-		Collections.sort(totalRoute, new CostRouteComparator());
-		if(totalRoute.isEmpty())
-			return null;
-		return this.route2points(totalRoute.get(0));
+		return null;
 	}
+	
+	public ArrayList<ArrayList<Point>> getPotentialRoutes() {
+		List<Point> points = Dataset.getPointByProduct(product);
+		List<Point> validPoints = Lambda.filter(new DistanceMatcher(user, maxDistance), points);	//punti entro un'area di raggio teorico massimo
+		EligibleRoutesCombinator erc = new EligibleRoutesCombinator(product, (int) quantity);
+		return erc.getEligibles(user, validPoints);
+	}
+	
 
 	private List<Point> route2points(Route percorso) {
 		List<Point> points = new ArrayList<Point>();
@@ -64,11 +98,12 @@ public class BestTotalCostAction {
 
 	private Route getValidRoute(Point from, List<Point> toVisit, boolean enableAPIs2) {
 		Route route = new Route();
+		toVisit = this.removePointById(user.getId(), toVisit);
 		PointWithDistance point = this.getNearest(from, toVisit,enableAPIs);
 		if(point != null){
 			route.add(point);
 			route.aggQuantity(point.getProduct(product).getQuantity());
-			while (route.getQuantity() < this.quantity) {
+			while (route.getQuantity() < this.quantity && route.getPoints().size()<this.maxNumberOfPoint) {
 				List<Point> toVisitBis = this.removePointById(point.getId(),toVisit);
 				point = this.getNearest(point, toVisitBis,enableAPIs);
 				if(point!=null){

@@ -59,12 +59,14 @@ public class ShortestRouteAction {
 	}
 	
 	public List<Point> getRouteConcurrence() {
+		System.out.println("CONCORRENTE");
 		List<ArrayList<Point>> partsOfPoints =  this.getPotentialRoutes();
 		if(partsOfPoints != null) {
 			ExecutorService pool = Executors.newFixedThreadPool(NCPU);
 			List<Future<Route>> pending = new LinkedList<Future<Route>>();
 			for (List<Point> points: partsOfPoints) {
-				pending.add(pool.submit(new Worker(points)));
+				Worker worker = new Worker(points);
+				pending.add(pool.submit(worker));
 			}
 			RouteComparator rc = new RouteComparator();
 			Route shortest = null;
@@ -125,6 +127,7 @@ public class ShortestRouteAction {
 
 	private Route getValidRoute(Point from, List<Point> toVisit, boolean enableAPIs2) {
 		Route route = new Route();
+		toVisit = this.removePointById(this.startingPoint.getId(), toVisit);
 		PointWithDistance point = this.getNearest(from, toVisit, enableAPIs);
 		while (point != null) {
 			route.add(point);
