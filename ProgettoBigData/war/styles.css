@@ -11,15 +11,10 @@
 	border-radius: 15px;
 }
 
-#best-total-cost {
-	display: none;
-}
-
+#best-total-cost,
+#no-results,
+#enableAPIs,
 #error {
-	display: none;
-}
-
-#enableAPIs{
 	display: none;
 }
 
@@ -38,4 +33,8 @@
 	border-radius: 15px;
 	padding-top: 11px;
 	display: none;
+}
+
+.error-label {
+	color: red;
 }

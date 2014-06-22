@@ -30,7 +30,7 @@ public class BestPriceAction {
 			if (c >= quantity)
 				return pointsToReturn;
 		}
-		return pointsToReturn;
+		return null;
 	}
 	
 }

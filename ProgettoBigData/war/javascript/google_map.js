@@ -11,8 +11,6 @@ function initialize() {
 	}
 	directionsDisplay = new google.maps.DirectionsRenderer();
 	map = new google.maps.Map(mapCanvas, mapOptions);
-	directionsDisplay.setMap(map);
-	directionsDisplay.setPanel(document.getElementById("result-details"));
 }
 
 var displayRoute = function(points) {
@@ -27,9 +25,14 @@ var displayRoute = function(points) {
 	};
 	directionsService.route(request, function(result, status) {
     	if (status === google.maps.DirectionsStatus.OK) {
+    		directionsDisplay.setMap(map);
     		directionsDisplay.setDirections(result);
     	}
 	});	
+}
+
+var hideRoute = function() {
+	directionsDisplay.setMap(null);
 }
 
 var calculateWaypoints = function(points) {

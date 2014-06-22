@@ -16,7 +16,6 @@
     <script src="https://maps.googleapis.com/maps/api/js"></script>    
     <script src="javascript/google_map.js"></script>
     <script src="javascript/myscript.js"></script>
-  </head>
 
   <body>
     <div class="container-fluid">
@@ -69,7 +68,7 @@
                             </div>
                         </div>
                         <div class="center-items">
-                            <button type="button" class="btn btn-success btn-lg" id="search-btn">Search</button>
+                            <button type="button" class="btn btn-success btn-lg" id="search-btn" data-loading-text="Processing...">Search</button>
                         </div>
 	        		</div>
         		</div>
@@ -79,9 +78,12 @@
         			<div class="col-md-12" id="result-details"></div>
         		</div>
         	</div>
-          	<div class="container-fluid" id="error">
-          		Sorry!! No valide route found.
-          	</div>         	
+            <div id="no-results" class="center-items">
+                <label class="error-label">No valid routes found.</label>
+            </div>
+            <div id="error" class="center-items">
+                <label class="error-label">An error has occurred.</label>
+            </div>	
         </div>
         <div class="col-md-8" id="map-container">
           <div id="map_canvas"></div>
