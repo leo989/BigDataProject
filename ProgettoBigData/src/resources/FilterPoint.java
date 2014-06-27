@@ -14,7 +14,6 @@ public class FilterPoint {
 				}
 			}
 			double maxDist = getAirDistance(Dataset.getUserPoint(), migliore);
-			System.out.println("DIST MAX "+maxDist);
 			for(Point p: pointByProduct){
 				if(validePoint(p,maxDist))
 					pointsToReturn.add(p);

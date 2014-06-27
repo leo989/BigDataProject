@@ -86,8 +86,7 @@ public class Route {
 				if(prod != null)
 					this.totalCost += prod.getPrice()*prod.getQuantity();
 			}
-		}
-		
+		}		
 	}
 	
 	

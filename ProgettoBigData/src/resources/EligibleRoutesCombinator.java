@@ -5,16 +5,17 @@ import java.util.List;
 
 public class EligibleRoutesCombinator {
 	
-	private final int MAX_JUMPS = 4;
+	private int maxJumps;
 	
 	private ArrayList<ArrayList<Point>> eligibleRoutes;
 	private String productName;
 	private Integer maxQuantity;
 	
-	public EligibleRoutesCombinator(String productName, Integer quantity) {
+	public EligibleRoutesCombinator(String productName, Integer quantity, int maxJumps) {
 		this.productName = productName;
 		this.maxQuantity = quantity;
 		eligibleRoutes = new ArrayList<ArrayList<Point>>();
+		this.maxJumps = maxJumps;
 	}
 	
 	public ArrayList<ArrayList<Point>> getEligibles(Point start, List<Point> points) {
@@ -27,7 +28,7 @@ public class EligibleRoutesCombinator {
 	private void recursiveEligibles(List<Point> points, ArrayList<Point> combination, int sum, int jumps) {
 		Point point;
 		Product prod;
-		if (!points.isEmpty() && jumps < MAX_JUMPS) {
+		if (!points.isEmpty() && jumps < this.maxJumps) {
 			for (int i = 0; i < points.size(); i++) {
 				point = points.get(i);
 				prod = point.getProduct(productName);

@@ -2,14 +2,7 @@ package actions;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import comparators.AerialDistanceComparator;
 import comparators.RouteComparator;
 import matchers.DistanceMatcher;
@@ -25,20 +18,24 @@ import servlets.SortPoints;
 
 public class ShortestRouteAction {
 
-	private static final double MAX_DISTANCE = 200;
-	  private final static int NCPU = Runtime.getRuntime().availableProcessors();
+	
+
 
 	
 	private String productName;
 	private Integer quantity;
 	private Point startingPoint;
 	private boolean enableAPIs;
+	private int maxDistance;
+	private int maxNumberOfPoint;
 
-	public ShortestRouteAction(String product, Integer quantity, Point startingPoint, boolean enableAPIs) {
+	public ShortestRouteAction(String product, Integer quantity, Point startingPoint, boolean enableAPIs, int maxDistance, int maxNumberOfPoint) {
 		this.quantity = quantity;
 		this.productName = product;
 		this.startingPoint = startingPoint;
 		this.enableAPIs = enableAPIs;
+		this.maxDistance = maxDistance;
+		this.maxNumberOfPoint = maxNumberOfPoint;
 	}
 
 	public List<Point> getRoute() {
@@ -57,47 +54,6 @@ public class ShortestRouteAction {
 		}
 		return null;
 	}
-	
-	public List<Point> getRouteConcurrence() {
-		System.out.println("CONCORRENTE");
-		List<ArrayList<Point>> partsOfPoints =  this.getPotentialRoutes();
-		if(partsOfPoints != null) {
-			ExecutorService pool = Executors.newFixedThreadPool(NCPU);
-			List<Future<Route>> pending = new LinkedList<Future<Route>>();
-			for (List<Point> points: partsOfPoints) {
-				Worker worker = new Worker(points);
-				pending.add(pool.submit(worker));
-			}
-			RouteComparator rc = new RouteComparator();
-			Route shortest = null;
-			try {
-				shortest = pending.get(0).get();
-				for (int i = 1; i < pending.size(); i++) {
-					Route r = pending.get(i).get();
-					if (rc.compare(shortest, r) > 0)
-						shortest = r;
-				}
-			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
-			}
-			return this.route2points(shortest);
-		}
-		return null;
-	}
-	
-	private class Worker implements Callable<Route> {
-		
-		private List<Point> points;
-
-		public Worker(List<Point> points) {
-			this.points = points;
-		}
-
-		@Override
-		public Route call() throws Exception {
-			return getValidRoute(startingPoint, points, enableAPIs);
-		}		
-	}
 
 	public ArrayList<ArrayList<Point>> getPotentialRoutes() {
 		List<Point> points = Dataset.getPointByProduct(productName);
@@ -109,9 +65,9 @@ public class ShortestRouteAction {
 			double maxDistance = dc.get2PointsDistanceInKm(startingPoint, nearestExhaustivePoint);
 			validPoints = Lambda.filter(new DistanceMatcher(startingPoint, maxDistance), points);	//punti dentro il raggio del punto più vicino che soddisfa da solo la richiesta			
 		} else {	//there's no point who fulfills the quantity request
-			validPoints = Lambda.filter(new DistanceMatcher(startingPoint, MAX_DISTANCE), points);	//punti entro un'area di raggio teorico massimo
+			validPoints = Lambda.filter(new DistanceMatcher(startingPoint, this.maxDistance), points);	//punti entro un'area di raggio teorico massimo
 		}
-		EligibleRoutesCombinator erc = new EligibleRoutesCombinator(productName, quantity);
+		EligibleRoutesCombinator erc = new EligibleRoutesCombinator(productName, quantity, this.maxNumberOfPoint);
 		return erc.getEligibles(startingPoint, validPoints);
 	}
 

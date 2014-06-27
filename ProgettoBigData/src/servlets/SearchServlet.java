@@ -1,8 +1,10 @@
 package servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,11 @@ import com.google.gson.Gson;
 @SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		
+		InputStream stream = this.getServletContext().getResourceAsStream("/WEB-INF/project.properties");
+		Properties properties = new Properties();
+		properties.load(stream);
+		
 		String product = req.getParameter("product");
 		int quantity = Integer.parseInt(req.getParameter("quantity"));
 		double kmAlLitro;
@@ -48,13 +55,17 @@ public class SearchServlet extends HttpServlet {
 			break;
 		}
 		case "2":{
-			ShortestRouteAction sra2 = new ShortestRouteAction(product, quantity, Dataset.getUserPoint(), enableAPIs);
+			int maxDistance = Integer.parseInt(properties.getProperty("maxDistance"));
+			int maxNumberOfPoint = Integer.parseInt(properties.getProperty("maxNumberOfPoint"));
+			ShortestRouteAction sra2 = new ShortestRouteAction(product, quantity, Dataset.getUserPoint(), enableAPIs, maxDistance, maxNumberOfPoint);
 			List<Point> points = sra2.getRoute();
 			out.println(gson.toJson(points));
 			break;
 		}
 		case "3":{
-			BestTotalCostAction btca = new BestTotalCostAction(product, quantity, Dataset.getUserPoint(),kmAlLitro,euroAlLitro, enableAPIs);
+			int maxDistance = Integer.parseInt(properties.getProperty("maxDistance"));
+			int maxNumberOfPoint = Integer.parseInt(properties.getProperty("maxNumberOfPointBTC"));
+			BestTotalCostAction btca = new BestTotalCostAction(product, quantity, Dataset.getUserPoint(),kmAlLitro,euroAlLitro, enableAPIs, maxDistance, maxNumberOfPoint);
 			List<Point> points = btca.getRoute();
 			out.println(gson.toJson(points));
 			break;
