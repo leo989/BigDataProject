@@ -14,8 +14,9 @@ function initialize() {
 }
 
 var displayRoute = function(points) {
-	var start = 'orte, VT';
-	var endPoint = points.pop();
+	var startPoint = points[0];
+	var endPoint = points[points.length - 1];
+	var start = new google.maps.LatLng(startPoint.latitude, startPoint.longitude)
 	var end = new google.maps.LatLng(endPoint.latitude, endPoint.longitude);
 	var request = {
 		origin: start,
@@ -37,11 +38,12 @@ var hideRoute = function() {
 
 var calculateWaypoints = function(points) {
 	var waypoints = new Array();
-	points.forEach(function(entry) {
-		var lat = entry.latitude;
-		var lng = entry.longitude;
-		waypoints.push(new Waypoint(new google.maps.LatLng(lat, lng), true))
-	});
+	var lat, lng;
+	for (var i = 1; i < points.length - 1; i++) {
+		lat = points[i].latitude;
+		lng = points[i].longitude;
+		waypoints.push(new Waypoint(new google.maps.LatLng(lat, lng), true));
+	}
 	return waypoints;
 };
 

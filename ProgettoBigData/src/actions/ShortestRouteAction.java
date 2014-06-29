@@ -17,10 +17,6 @@ import resources.PointWithDistance;
 import servlets.SortPoints;
 
 public class ShortestRouteAction {
-
-	
-
-
 	
 	private String productName;
 	private Integer quantity;
@@ -29,10 +25,10 @@ public class ShortestRouteAction {
 	private int maxDistance;
 	private int maxNumberOfPoint;
 
-	public ShortestRouteAction(String product, Integer quantity, Point startingPoint, boolean enableAPIs, int maxDistance, int maxNumberOfPoint) {
+	public ShortestRouteAction(Point start, String product, Integer quantity, boolean enableAPIs, int maxDistance, int maxNumberOfPoint) {
 		this.quantity = quantity;
 		this.productName = product;
-		this.startingPoint = startingPoint;
+		this.startingPoint = start;
 		this.enableAPIs = enableAPIs;
 		this.maxDistance = maxDistance;
 		this.maxNumberOfPoint = maxNumberOfPoint;
@@ -71,9 +67,10 @@ public class ShortestRouteAction {
 		return erc.getEligibles(startingPoint, validPoints);
 	}
 
-	private List<Point> route2points(Route percorso) {
+	private List<Point> route2points(Route route) {
 		List<Point> points = new ArrayList<Point>();
-		for (PointWithDistance pt : percorso.getPoints()) {
+		points.add(startingPoint);
+		for (PointWithDistance pt : route.getPoints()) {
 			Point p = new Point(pt.getLatitude(), pt.getLongitude(), pt.getId());
 			p.setProducts(pt.getProducts());
 			points.add(p);

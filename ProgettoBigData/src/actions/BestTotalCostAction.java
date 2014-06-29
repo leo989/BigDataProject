@@ -14,18 +14,19 @@ import resources.PointWithDistance;
 import servlets.SortPoints;
 
 public class BestTotalCostAction {
+	
 	private String product;
 	private double quantity;
-	private Point user;
+	private Point startingPoint;
 	private double kmWeight;
 	private boolean enableAPIs;
 	private double maxDistance;
 	private int maxNumberOfPoint;
 
-	public BestTotalCostAction(String product, int quantity, Point userPoint, double kmPerLiter, double euroPerLiter, boolean enableAPIs, int maxDistance, int maxNumberOfPoint) {
+	public BestTotalCostAction(Point start, String product, int quantity, double kmPerLiter, double euroPerLiter, boolean enableAPIs, int maxDistance, int maxNumberOfPoint) {
 		this.product = product;
 		this.quantity = quantity;
-		this.user = userPoint;
+		this.startingPoint = start;
 		this.kmWeight = euroPerLiter/kmPerLiter;
 		this.enableAPIs = enableAPIs;
 		this.maxDistance = maxDistance;
@@ -37,7 +38,7 @@ public class BestTotalCostAction {
 		List<ArrayList<Point>> partsOfPoints =  this.getPotentialRoutes();
 		if(partsOfPoints != null) {
 			for(List<Point> list: partsOfPoints){
-				Route route = this.getValidRoute(user, list, enableAPIs);
+				Route route = this.getValidRoute(startingPoint, list, enableAPIs);
 				if(route != null){
 					route.aggTotalCost(product, quantity, kmWeight);
 					totalRoute.add(route);
@@ -53,14 +54,15 @@ public class BestTotalCostAction {
 	
 	public ArrayList<ArrayList<Point>> getPotentialRoutes() {
 		List<Point> points = Dataset.getPointByProduct(product);
-		List<Point> validPoints = Lambda.filter(new DistanceMatcher(user, maxDistance), points);	//punti entro un'area di raggio teorico massimo
+		List<Point> validPoints = Lambda.filter(new DistanceMatcher(startingPoint, maxDistance), points);	//punti entro un'area di raggio teorico massimo
 		EligibleRoutesCombinator erc = new EligibleRoutesCombinator(product, (int) quantity, this.maxNumberOfPoint);
-		return erc.getEligibles(user, validPoints);
+		return erc.getEligibles(startingPoint, validPoints);
 	}
 	
 
 	private List<Point> route2points(Route percorso) {
 		List<Point> points = new ArrayList<Point>();
+		points.add(startingPoint);
 		for(PointWithDistance pt: percorso.getPoints()){
 			Point p = new Point(pt.getLatitude(), pt.getLongitude(), pt.getId());
 			p.setProducts(pt.getProducts());
@@ -71,7 +73,7 @@ public class BestTotalCostAction {
 
 	private Route getValidRoute(Point from, List<Point> toVisit, boolean enableAPIs2) {
 		Route route = new Route();
-		toVisit = this.removePointById(user.getId(), toVisit);
+		toVisit = this.removePointById(startingPoint.getId(), toVisit);
 		PointWithDistance point = this.getNearest(from, toVisit,enableAPIs);
 		if(point != null){
 			route.add(point);

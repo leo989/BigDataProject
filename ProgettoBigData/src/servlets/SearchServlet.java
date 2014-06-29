@@ -26,6 +26,11 @@ public class SearchServlet extends HttpServlet {
 		Properties properties = new Properties();
 		properties.load(stream);
 		
+		double startLat = Double.parseDouble(req.getParameter("startLat"));
+		double startLng = Double.parseDouble(req.getParameter("startLng"));
+		
+		Point start = new Point(startLat, startLng, -1);
+		
 		String product = req.getParameter("product");
 		int quantity = Integer.parseInt(req.getParameter("quantity"));
 		double kmAlLitro;
@@ -50,22 +55,22 @@ public class SearchServlet extends HttpServlet {
 		
 		switch(searchMethod.toLowerCase()){
 		case "1":{
-			BestPriceAction bpa = new BestPriceAction(product, quantity);
+			BestPriceAction bpa = new BestPriceAction(start, product, quantity);
 			out.println(gson.toJson(bpa.getRoute()));
 			break;
 		}
 		case "2":{
 			int maxDistance = Integer.parseInt(properties.getProperty("maxDistance"));
 			int maxNumberOfPoint = Integer.parseInt(properties.getProperty("maxNumberOfPoint"));
-			ShortestRouteAction sra2 = new ShortestRouteAction(product, quantity, Dataset.getUserPoint(), enableAPIs, maxDistance, maxNumberOfPoint);
-			List<Point> points = sra2.getRoute();
+			ShortestRouteAction sra = new ShortestRouteAction(start, product, quantity, enableAPIs, maxDistance, maxNumberOfPoint);
+			List<Point> points = sra.getRoute();
 			out.println(gson.toJson(points));
 			break;
 		}
 		case "3":{
 			int maxDistance = Integer.parseInt(properties.getProperty("maxDistance"));
 			int maxNumberOfPoint = Integer.parseInt(properties.getProperty("maxNumberOfPointBTC"));
-			BestTotalCostAction btca = new BestTotalCostAction(product, quantity, Dataset.getUserPoint(),kmAlLitro,euroAlLitro, enableAPIs, maxDistance, maxNumberOfPoint);
+			BestTotalCostAction btca = new BestTotalCostAction(start, product, quantity, kmAlLitro, euroAlLitro, enableAPIs, maxDistance, maxNumberOfPoint);
 			List<Point> points = btca.getRoute();
 			out.println(gson.toJson(points));
 			break;

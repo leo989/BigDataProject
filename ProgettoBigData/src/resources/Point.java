@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Point {
+	
 	double latitude;
 	private double longitude;
 	private Map<String, Product> products;
-	private long id;
-	
+	private long id;	
 	
 	public Point(double latitude, double longitude, long id){
 		this.setId(id);

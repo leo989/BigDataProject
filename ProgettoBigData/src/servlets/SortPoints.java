@@ -14,7 +14,7 @@ public class SortPoints {
 	public static List<PointWithDistance> sortByDistance(Point from, List<Point> points, boolean enableAPIs) {
 		List<PointWithDistance> ris;
 		try {
-			ris = calculateDistance(from, points,enableAPIs);
+			ris = calculateDistance(from, points, enableAPIs);
 			Collections.sort(ris);
 			return ris;
 		} catch (IOException e) {
@@ -40,19 +40,18 @@ public class SortPoints {
 		return null;
 	}
 
-	private static List<PointWithDistance> calculateDistance(Point from, List<Point> points, boolean enableAPIs)
-			throws IOException {
+	private static List<PointWithDistance> calculateDistance(Point from, List<Point> points, boolean enableAPIs) throws IOException {
 		List<PointWithDistance> pointsWithDistance = new ArrayList<PointWithDistance>();
 		PointWithDistance point;
 		for (Point p : points) {
 			if (!from.equals(p)) {
 				double dist;
-				if(enableAPIs){
+				if (enableAPIs) {
 					APIRequester apir = new APIRequester();
 					String json = apir.request(from, p);
 					System.out.println(json);
 					dist = DistanceParser.getDistance(json);
-				}else{
+				} else {
 					dist = DistanceMatrix.getDistance(from.getId(), p.getId());
 				}
 				if (dist != 0) {

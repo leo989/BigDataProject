@@ -15,7 +15,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js"></script>    
     <script src="javascript/google_map.js"></script>
-    <script src="javascript/myscript.js"></script>
+    <script src="javascript/script.js"></script>
 
   <body>
     <div class="container-fluid">
@@ -63,7 +63,7 @@
                         <div class="col-md-12" id="enableAPIs">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="APIs"> Use the APIs
+                                    <input type="checkbox" name="APIs" checked> Use the APIs
                                 </label>
                             </div>
                         </div>
@@ -75,7 +75,11 @@
           	</form>
           	<div class="container-fluid">
           		<div class="row">
-        			<div class="col-md-12" id="result-details"></div>
+        			<div class="col-md-12" id="result-details">
+        				<table id="table-details">
+        					<!-- details here -->
+        				</table>
+        			</div>
         		</div>
         	</div>
             <div id="no-results" class="center-items">

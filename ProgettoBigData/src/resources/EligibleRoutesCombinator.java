@@ -6,7 +6,6 @@ import java.util.List;
 public class EligibleRoutesCombinator {
 	
 	private int maxJumps;
-	
 	private ArrayList<ArrayList<Point>> eligibleRoutes;
 	private String productName;
 	private Integer maxQuantity;
