@@ -20,6 +20,7 @@ var search = function() {
 	hideRoute();
 	visualizer('hide', '#no-results');
 	visualizer('hide', '#error');
+	visualizer('hide', '#result-details');
 	var data = $('#input-form').serializeArray();
 	data[data.length] = {name: 'startLat', value: '42.422572'};
 	data[data.length] = {name: 'startLng', value: '12.104944'};
@@ -29,7 +30,8 @@ var search = function() {
 		success: function(data) {
 			if (data != null) {
 				displayRoute(data);
-				displayDetails(data);
+				buildDetails(data);
+				visualizer('show', '#result-details');
 			} else {
 				visualizer('show', '#no-results');
 			}
@@ -43,7 +45,7 @@ var search = function() {
 	});
 };
 
-var displayDetails = function(points) {
+var buildDetails = function(points) {
 	console.log(points);
 	var alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 	var rd = $('#table-details');
@@ -63,7 +65,6 @@ var displayDetails = function(points) {
 			  '<td><div class="red marker">' + alphabet[points.length-1] + '</div></td>' +
 			  '<td>' + buildProductString(points[points.length-1]) + '</td>' +
 			  '</tr>');
-	$('#result-details').show();
 };
 
 var buildProductString = function(point) {
