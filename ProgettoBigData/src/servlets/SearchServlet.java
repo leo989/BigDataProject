@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import resources.Dataset;
 import resources.Point;
 import actions.BestPriceAction;
 import actions.BestTotalCostAction;
@@ -28,7 +27,6 @@ public class SearchServlet extends HttpServlet {
 		
 		double startLat = Double.parseDouble(req.getParameter("startLat"));
 		double startLng = Double.parseDouble(req.getParameter("startLng"));
-		
 		Point start = new Point(startLat, startLng, -1);
 		
 		String product = req.getParameter("product");
@@ -45,10 +43,8 @@ public class SearchServlet extends HttpServlet {
 		} catch(Exception e) {
 			euroAlLitro = 1.6;
 		}
-		String check = req.getParameter("APIs");
-		boolean enableAPIs = (check != null);
-		String searchMethod = req.getParameter("search_method");
 		
+		String searchMethod = req.getParameter("search_method");
 		resp.setContentType("application/json");
 		PrintWriter out = resp.getWriter();
 		Gson gson = new Gson();
@@ -62,7 +58,7 @@ public class SearchServlet extends HttpServlet {
 		case "2":{
 			int maxDistance = Integer.parseInt(properties.getProperty("maxDistance"));
 			int maxNumberOfPoint = Integer.parseInt(properties.getProperty("maxNumberOfPoint"));
-			ShortestRouteAction sra = new ShortestRouteAction(start, product, quantity, enableAPIs, maxDistance, maxNumberOfPoint);
+			ShortestRouteAction sra = new ShortestRouteAction(start, product, quantity, true, maxDistance, maxNumberOfPoint);
 			List<Point> points = sra.getRoute();
 			out.println(gson.toJson(points));
 			break;
@@ -70,7 +66,7 @@ public class SearchServlet extends HttpServlet {
 		case "3":{
 			int maxDistance = Integer.parseInt(properties.getProperty("maxDistance"));
 			int maxNumberOfPoint = Integer.parseInt(properties.getProperty("maxNumberOfPointBTC"));
-			BestTotalCostAction btca = new BestTotalCostAction(start, product, quantity, kmAlLitro, euroAlLitro, enableAPIs, maxDistance, maxNumberOfPoint);
+			BestTotalCostAction btca = new BestTotalCostAction(start, product, quantity, kmAlLitro, euroAlLitro, true, maxDistance, maxNumberOfPoint);
 			List<Point> points = btca.getRoute();
 			out.println(gson.toJson(points));
 			break;

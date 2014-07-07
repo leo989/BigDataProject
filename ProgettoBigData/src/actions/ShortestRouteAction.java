@@ -3,18 +3,19 @@ package actions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import comparators.AerialDistanceComparator;
 import comparators.RouteComparator;
 import matchers.DistanceMatcher;
 import matchers.QuantityMatcher;
 import ch.lambdaj.Lambda;
 import resources.Dataset;
-import resources.DistanceCalculator;
-import resources.EligibleRoutesCombinator;
 import resources.Route;
 import resources.Point;
 import resources.PointWithDistance;
-import servlets.SortPoints;
+import utils.DistanceCalculator;
+import utils.EligibleRoutesCombinator;
+import utils.SortPoints;
 
 public class ShortestRouteAction {
 	

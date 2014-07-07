@@ -2,8 +2,8 @@ package comparators;
 
 import java.util.Comparator;
 
-import resources.DistanceCalculator;
 import resources.Point;
+import utils.DistanceCalculator;
 
 public class AerialDistanceComparator implements Comparator<Point> {
 

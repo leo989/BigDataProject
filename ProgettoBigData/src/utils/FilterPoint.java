@@ -1,7 +1,10 @@
-package resources;
+package utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import resources.Dataset;
+import resources.Point;
 
 public class FilterPoint {
 	public static List<Point> filter(List<Point> pointByProduct, String nameProduct, double quantity) {

@@ -3,8 +3,8 @@ package matchers;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
-import resources.DistanceCalculator;
 import resources.Point;
+import utils.DistanceCalculator;
 
 public class DistanceMatcher extends BaseMatcher<Object>{
 

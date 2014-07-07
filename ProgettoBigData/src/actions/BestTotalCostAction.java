@@ -3,15 +3,16 @@ package actions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import matchers.DistanceMatcher;
 import ch.lambdaj.Lambda;
 import comparators.RouteComparator;
 import resources.Dataset;
-import resources.EligibleRoutesCombinator;
 import resources.Route;
 import resources.Point;
 import resources.PointWithDistance;
-import servlets.SortPoints;
+import utils.EligibleRoutesCombinator;
+import utils.SortPoints;
 
 public class BestTotalCostAction {
 	

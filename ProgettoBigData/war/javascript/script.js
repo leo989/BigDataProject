@@ -7,16 +7,11 @@ $(document).ready(function() {
 
 	$('#type-of-search').change(function() {
 		switch (this.value) {
-			case '2':
-				$('#enableAPIs').fadeIn();
-				break;
 			case '3':
 				$('#best-total-cost').fadeIn();
-				$('#enableAPIs').fadeIn();
 				break;
 			default:
 				$('#best-total-cost').hide();
-				$('#enableAPIs').hide();
 		}
 	});
 })

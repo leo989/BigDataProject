@@ -1,7 +1,10 @@
-package resources;
+package utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import resources.Point;
+import resources.Product;
 
 public class EligibleRoutesCombinator {
 	

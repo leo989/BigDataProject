@@ -1,4 +1,6 @@
-package resources;
+package utils;
+
+import resources.Point;
 
 public class DistanceCalculator {
 	
