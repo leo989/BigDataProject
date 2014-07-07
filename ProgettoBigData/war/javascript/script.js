@@ -50,7 +50,7 @@ var buildDetails = function(points) {
 	var alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 	var rd = $('#table-details');
 	var color
-	rd.empty();	
+	rd.empty();
 	rd.append('<tr>'+
 			  '<td><div class="green marker">' + alphabet[0] + '</div></td>' +
 			  '<td>Starting point</td>' +
