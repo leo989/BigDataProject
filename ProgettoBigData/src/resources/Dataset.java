@@ -21,30 +21,30 @@ public class Dataset {
 		//roma
 		Point p = new Point(41.884899,12.478988,1);
 		p.addProduct(new Product("gamberi",10,1));
-		p.addProduct(new Product("soiola",20, 0.5));
+		p.addProduct(new Product("soiole",20, 0.5));
 		POINTS.add(p);
 		//civitavecchia
 		p = new Point(42.094911,11.79517,2);
 		p.addProduct(new Product("gamberi",15,1));
-		p.addProduct(new Product("soiola",15,2));
+		p.addProduct(new Product("soiole",15,2));
 		p.addProduct(new Product("cozze",100,0.1));
 		POINTS.add(p);
 		//napoli
 		p = new Point(40.857448,14.268097,3);
 		p.addProduct(new Product("gamberi",15,1));
-		p.addProduct(new Product("soiola",15,2));
+		p.addProduct(new Product("soiole",15,2));
 		p.addProduct(new Product("cozze",300,0.2));
 		POINTS.add(p);
 		//orbetello
 		p = new Point(42.441131,11.21265,4);
 		p.addProduct(new Product("gamberi",30,1.5));
-		p.addProduct(new Product("soiola",10,3));
+		p.addProduct(new Product("soiole",10,3));
 		p.addProduct(new Product("vongole",200,1));
 		POINTS.add(p);
 		//montalto di castro
 		p = new Point(42.354537, 11.606610,5);
 		p.addProduct(new Product("gamberi",30,1.5));
-		p.addProduct(new Product("soiola",10,3));
+		p.addProduct(new Product("soiole",10,3));
 		p.addProduct(new Product("vongole",200,1));
 		POINTS.add(p);
 		//tarquinia
@@ -71,7 +71,7 @@ public class Dataset {
 		//terracina
 		p = new Point(41.310915, 13.232832,10);
 		p.addProduct(new Product("spigole",15,5));
-		p.addProduct(new Product("soiola",200,3));
+		p.addProduct(new Product("soiole",200,3));
 		POINTS.add(p);
 		//montefiascone
 		p = new Point(42.556173, 12.035764,11);
@@ -86,7 +86,7 @@ public class Dataset {
 		//bracciano
 		p = new Point(42.101653, 12.174316,13);
 		p.addProduct(new Product("trote",100,1.5));
-		p.addProduct(new Product("soiola",200,2.5));
+		p.addProduct(new Product("soiole",200,2.5));
 		POINTS.add(p);
 		//vetralla
 		p = new Point(42.316908, 12.058074,14);
@@ -95,7 +95,7 @@ public class Dataset {
 		POINTS.add(p);
 		//soriano nel cimino
 		p = new Point(42.427779, 12.236783,15);
-		p.addProduct(new Product("soiola",50,2));
+		p.addProduct(new Product("soiole",50,2));
 		p.addProduct(new Product("vongole",70,5));
 		POINTS.add(p);
 		//marta
