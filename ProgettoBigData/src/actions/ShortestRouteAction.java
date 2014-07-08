@@ -38,6 +38,7 @@ public class ShortestRouteAction {
 	public List<Point> getRoute() {
 		List<Route> totalRoute = new ArrayList<Route>();
 		List<ArrayList<Point>> partsOfPoints =  this.getPotentialRoutes();
+		System.out.println("Number of potential routes: "+partsOfPoints.size());
 		if(partsOfPoints != null) {
 			for(List<Point> list: partsOfPoints){
 				Route route = this.getValidRoute(startingPoint, list, enableAPIs);

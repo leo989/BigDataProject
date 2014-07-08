@@ -6,6 +6,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.gson.Gson;
 
 import resources.Point;
@@ -17,13 +27,23 @@ public class APIRequester {
 	public APIRequester(){
 		gson = new Gson();
 	}
-	public String request(Point from, Point to) throws IOException{
-		String origin = "origin="+from.getLatitude()+","+from.getLongitude();
-		String destination = "destination="+to.getLatitude()+","+to.getLongitude();
-		URL url = new URL(APIUrl+origin+"&"+destination);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		BufferedReader read = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		String json = gson.fromJson(read, Object.class).toString();
-		return json;		
+	
+	public JSONObject request(Point start, Point end) {
+		try {
+			String origin = start.getLatitude()+","+start.getLongitude();
+			String destination = end.getLatitude()+","+end.getLongitude();
+			HttpTransport httpTransport = new NetHttpTransport();
+			HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
+			JSONParser parser = new JSONParser();
+			GenericUrl url = new GenericUrl("http://maps.googleapis.com/maps/api/directions/json");
+			url.put("origin", origin);
+			url.put("destination", destination);
+			HttpRequest request = requestFactory.buildGetRequest(url);
+			HttpResponse httpResponse = request.execute();
+			return (JSONObject) parser.parse(httpResponse.parseAsString()); 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -27,7 +27,7 @@ public class SearchServlet extends HttpServlet {
 		
 		double startLat = Double.parseDouble(req.getParameter("startLat"));
 		double startLng = Double.parseDouble(req.getParameter("startLng"));
-		Point start = new Point(startLat, startLng, -1);
+		Point start = new Point(startLat, startLng, 0);
 		
 		String product = req.getParameter("product");
 		int quantity = Integer.parseInt(req.getParameter("quantity"));
